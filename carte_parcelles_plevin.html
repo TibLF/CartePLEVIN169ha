@@ -2,9 +2,12 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Carte des parcelles de Plévin</title>
+  <title>Carte des Parcelles à Plévin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Feuilles de style Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  
   <style>
     #map {
       height: 100vh;
@@ -15,42 +18,27 @@
 <body>
   <div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    // Crée la carte centrée sur Plévin
-    const map = L.map('map').setView([48.25, -3.55], 15);
+  <!-- Bibliothèque Leaflet -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-    // Ajoute une couche OpenStreetMap
+  <script>
+    // Initialiser la carte centrée sur Plévin (coordonnées approximatives)
+    var map = L.map('map').setView([48.284, -3.510], 15);
+
+    // Ajouter une couche de tuiles OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap',
-      maxZoom: 19
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
     }).addTo(map);
 
-    // Charge les données GeoJSON
+    // Charger le fichier GeoJSON (doit être à la racine du dépôt GitHub Pages)
     fetch('parcelles_plevin.geojson')
       .then(response => response.json())
       .then(data => {
-        const geojsonLayer = L.geoJSON(data, {
-          onEachFeature: function (feature, layer) {
-            if (feature.properties) {
-              let popupContent = "";
-              for (const key in feature.properties) {
-                popupContent += `<b>${key}</b>: ${feature.properties[key]}<br>`;
-              }
-              layer.bindPopup(popupContent);
-            }
-          },
-          style: {
-            color: 'green',
-            weight: 1
-          }
-        }).addTo(map);
-
-        // Ajuste la vue à l'ensemble des parcelles
-        map.fitBounds(geojsonLayer.getBounds());
+        L.geoJSON(data).addTo(map);
       })
-      .catch(err => {
-        alert("Erreur lors du chargement du fichier GeoJSON : " + err);
+      .catch(error => {
+        console.error('Erreur lors du chargement du fichier GeoJSON :', error);
       });
   </script>
 </body>
