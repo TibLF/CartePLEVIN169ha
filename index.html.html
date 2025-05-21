@@ -1,45 +1,37 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <title>Carte des Parcelles à Plévin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Feuilles de style Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  
-  <style>
-    #map {
-      height: 100vh;
-      width: 100%;
-    }
-  </style>
+    <meta charset="utf-8" />
+    <title>Carte des parcelles à Plévin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha512-sA+e2GCz5POgaDnFFG7tZyXHo2RUXvV3k0W4bUvDShzF2WZdxMNiZrqDId20kKd0RGJi/6tKpRtP4v1y0SjwQw=="
+        crossorigin="" />
+    <style>
+        #map { height: 100vh; }
+    </style>
 </head>
 <body>
-  <div id="map"></div>
+    <div id="map"></div>
 
-  <!-- Bibliothèque Leaflet -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha512-vXq8NfLzCXxRTZz8U0h2U7IOkHmv9nAF3ZVHxMyClnu+gExQ4EeLbtWwAHVsmZiXV9vWTOAl7njH0CdmP9Z4Xg=="
+        crossorigin=""></script>
 
-  <script>
-    // Initialiser la carte centrée sur Plévin (coordonnées approximatives)
-    var map = L.map('map').setView([48.284, -3.510], 15);
+    <!-- Inclusion du fichier GeoJSON sous forme de JS -->
+    <script src="parcelles_plevin.js"></script>
 
-    // Ajouter une couche de tuiles OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap'
-    }).addTo(map);
+    <script>
+        var map = L.map('map').setView([48.305, -3.530], 15);
 
-    // Charger le fichier GeoJSON (doit être à la racine du dépôt GitHub Pages)
-    fetch('parcelles_plevin.geojson')
-      .then(response => response.json())
-      .then(data => {
-        L.geoJSON(data).addTo(map);
-      })
-      .catch(error => {
-        console.error('Erreur lors du chargement du fichier GeoJSON :', error);
-      });
-  </script>
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.geoJSON(parcellesGeoJSON).addTo(map);
+    </script>
 </body>
 </html>
+
+
